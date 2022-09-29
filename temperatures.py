@@ -1,5 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
+import pytest
 
 def read_data(filename, num_measurements):
     # read data from file
@@ -22,8 +23,15 @@ def plot_data(temperatures, mean, filename):
     plt.savefig(filename)
     plt.clf()
 
+def test_compute_mean():
+    result = compute_mean([1.0, 2.0, 3.0, 4.0])
+    assert result == pytest.approx(2.5)
 
-for num_measurements in [25, 100, 500]:
-    temperatures = read_data("temperatures.csv", num_measurements)
-    mean = compute_mean(temperatures)
-    plot_data(temperatures, mean, str(num_measurements) + ".png")
+def main():
+    for num_measurements in [25, 100, 500]:
+        temperatures = read_data("temperatures.csv", num_measurements)
+        mean = compute_mean(temperatures)
+        plot_data(temperatures, mean, str(num_measurements) + ".png")
+
+if __name__ == "__main__":
+    main()
