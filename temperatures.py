@@ -1,6 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import pytest
+import click
 
 def read_data(filename, num_measurements):
     # read data from file
@@ -27,11 +28,16 @@ def test_compute_mean():
     result = compute_mean([1.0, 2.0, 3.0, 4.0])
     assert result == pytest.approx(2.5)
 
-def main():
-    for num_measurements in [25, 100, 500]:
-        temperatures = read_data("temperatures.csv", num_measurements)
-        mean = compute_mean(temperatures)
-        plot_data(temperatures, mean, str(num_measurements) + ".png")
+
+@click.command()
+@click.option('--num-measurements', type=int, help='Number of measurements.')
+@click.option('--input-file', help='Input file.')
+@click.option('--output-file', help='Output file.')
+
+def main(num_measurements, input_file, output_file):
+    temperatures = read_data(input_file, num_measurements)
+    mean = compute_mean(temperatures)
+    plot_data(temperatures, mean, output_file)
 
 if __name__ == "__main__":
     main()
